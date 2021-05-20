@@ -79,6 +79,13 @@ const SignUp = styled.a`
   &:hover {
     background: #0483ee;
   }
+
+  @media (max-width: 480px) {
+    font-size: 12px;
+    margin-top: 16px;
+    margin-bottom: 12px;
+    padding: 12px 0;
+  }
 `;
 
 const Description = styled.p`

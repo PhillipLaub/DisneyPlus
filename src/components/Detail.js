@@ -1,46 +1,60 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useParams } from "react-router-dom";
+import db from "../firebase";
 
 function Detail() {
+  const { id } = useParams();
+  const [movie, setMovie] = useState();
+
+  useEffect(() => {
+    //grab movie
+    db.collection("movies")
+      .doc(id)
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          //save the movie data
+          setMovie(doc.data());
+        } else {
+          //redirect to home
+        }
+      });
+  }, [id]);
+
+  console.log("Movie is: ", movie);
+
   return (
     <Container>
-      <Background>
-        <img
-          src="https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/4F39B7E16726ECF419DD7C49E011DD95099AA20A962B0B10AA1881A70661CE45/scale?width=1440&aspectRatio=1.78&format=jpeg"
-          alt=""
-        />
-      </Background>
-
-      <ImageTitle>
-        <img
-          src="https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/D7AEE1F05D10FC37C873176AAA26F777FC1B71E7A6563F36C6B1B497CAB1CEC2/scale?width=1440&aspectRatio=1.78"
-          alt=""
-        />
-      </ImageTitle>
-      <Controls>
-        <PlayButton>
-          <img src="/images/play-icon-black.png" alt="" />
-          <span>PLAY</span>
-        </PlayButton>
-        <TrailerButton>
-          <img src="/images/play-icon-white.png" alt="" />
-          <span>Trailer</span>
-        </TrailerButton>
-        <AddButton>
-          <span>+</span>
-        </AddButton>
-        <GroupWatchButton>
-          <img src="/images/group-icon.png" alt="" />
-        </GroupWatchButton>
-      </Controls>
-      <Subtitle>2018 - 7m - Family, Fantasy, Kids, Animation</Subtitle>
-      <Description>
-        The film is about an aging and lonely Chinese-Canadian mother, suffering
-        from empty nest syndrome, who receives an unexpected second chance at
-        motherhood when she makes a steamed bun (baozi) that comes to life. The
-        film won the Oscar for the Best Animated Short Film at the 91st Academy
-        Awards.
-      </Description>
+      {movie && (
+        <>
+          {" "}
+          <Background>
+            <img src={movie.backgroundImg} alt="" />
+          </Background>
+          <ImageTitle>
+            <img src={movie.titleImg} alt="" />
+          </ImageTitle>
+          <Controls>
+            <PlayButton>
+              <img src="/images/play-icon-black.png" alt="" />
+              <span>PLAY</span>
+            </PlayButton>
+            <TrailerButton>
+              <img src="/images/play-icon-white.png" alt="" />
+              <span>Trailer</span>
+            </TrailerButton>
+            <AddButton>
+              <span>+</span>
+            </AddButton>
+            <GroupWatchButton>
+              <img src="/images/group-icon.png" alt="" />
+            </GroupWatchButton>
+          </Controls>
+          <Subtitle>{movie.subTitle}</Subtitle>
+          <Description>{movie.description}</Description>
+        </>
+      )}
     </Container>
   );
 }
@@ -61,11 +75,16 @@ const Background = styled.div`
   right: 0;
   z-index: -1;
   opacity: 0.8;
+  background: #1a1d29;
 
   img {
     width: 100%;
     height: 100-%;
     object-fit: cover;
+  }
+
+  @media (max-width: 480px) {
+    margin-top: 70px;
   }
 `;
 
@@ -81,11 +100,21 @@ const ImageTitle = styled.div`
     height: 100%;
     object-fit: container;
   }
+
+  @media (max-width: 480px) {
+    height: 15vh;
+    width: 17.5vw;
+  }
 `;
 
 const Controls = styled.div`
   display: flex;
   align-items: center;
+  margin-top: 50px;
+
+  @media (max-width: 480px) {
+    margin-top: 10px;
+  }
 `;
 
 const PlayButton = styled.button`
@@ -103,6 +132,16 @@ const PlayButton = styled.button`
 
   &:hover {
     background: rgb(198, 198, 198);
+  }
+
+  @media (max-width: 480px) {
+    letter-spacing: 0.8px;
+    font-size: 12px;
+    padding: 0 15px 0 5px;
+
+    span {
+      width: 100%;
+    }
   }
 `;
 
@@ -129,10 +168,25 @@ const AddButton = styled.button`
     font-size: 30px;
     color: white;
   }
+
+  @media (max-width: 480px) {
+    width: 40px;
+    height: 40px;
+    span {
+      font-size: 15px;
+    }
+  }
 `;
 
 const GroupWatchButton = styled(AddButton)`
   background: rgb(0, 0, 0);
+
+  @media (max-width: 480px) {
+    img {
+      height: 100%;
+      width: 150%;
+    }
+  }
 `;
 
 const Subtitle = styled.div`

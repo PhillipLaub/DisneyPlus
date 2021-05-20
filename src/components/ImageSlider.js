@@ -54,6 +54,9 @@ const Carousel = styled(Slider)`
   button {
     z-index: 1;
   }
+  @media (max-width: 480px) {
+    overflow: visible;
+  }
 `;
 
 const Wrap = styled.div`
