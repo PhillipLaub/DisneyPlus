@@ -1,35 +1,23 @@
 import React from "react";
 import styled from "styled-components";
+import { selectMovies } from "../features/movie/movieSlice";
+import { useSelector } from "react-redux";
 
 function Movies() {
+  const movies = useSelector(selectMovies);
+  console.log(movies);
+
+  console.log("Movies: ", movies);
   return (
     <Container>
       <h4>Recommended for You</h4>
       <Content>
-        <Wrap>
-          <img
-            src="https://variety.com/wp-content/uploads/2020/07/star-wars-the-bad-batch-logo.jpg"
-            alt=""
-          />
-        </Wrap>
-        <Wrap>
-          <img
-            src="https://variety.com/wp-content/uploads/2020/07/star-wars-the-bad-batch-logo.jpg"
-            alt=""
-          />
-        </Wrap>
-        <Wrap>
-          <img
-            src="https://variety.com/wp-content/uploads/2020/07/star-wars-the-bad-batch-logo.jpg"
-            alt=""
-          />
-        </Wrap>
-        <Wrap>
-          <img
-            src="https://variety.com/wp-content/uploads/2020/07/star-wars-the-bad-batch-logo.jpg"
-            alt=""
-          />
-        </Wrap>
+        {movies &&
+          movies.map((movie) => (
+            <Wrap key={movie.id}>
+              <img src={movie.cardImg} alt="" />
+            </Wrap>
+          ))}
       </Content>
     </Container>
   );
